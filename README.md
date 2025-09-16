@@ -36,3 +36,21 @@ python test/mqqt_test_consumer.py
 ```
 
 
+# run web server
+
+```
+python tests/server.py
+
+```
+
+![alt text](image/webpage.png)
+![alt text](image/esp8266.jpeg)
+![alt text](image/button_closed.png)
+
+
+### test by publishing test data
+
+```
+python tests/mqtt_test_publisher.p
+
+```
