@@ -2,6 +2,7 @@ import time
 import logging
 import paho.mqtt.client as mqtt
 import config
+import json
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -35,7 +36,8 @@ client.username_pw_set(config.HIVEMQ_USERNAME, config.HIVEMQ_PASSWORD)
 client.connect(config.HIVEMQ_HOST, config.HIVEMQ_PORT, 60)
 client.loop_start()
 time.sleep(1)
-client.publish(config.MQTT_TOPIC, payload="This is Test before mqtt from esp8266", qos=1)
+sample_payload = {"ID": "RTU001", "5": "1", "4": "1", "0": "1", "14": "1", "12": "1"}
+client.publish(config.MQTT_TOPIC, payload=json.dumps(sample_payload), qos=1)
 
 time.sleep(1)
 client.disconnect()

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data</title>
+    <style>
+        #sensor-data {
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .sensor-item {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .sensor-key {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sensor Data</h1>
+    <div id="sensor-data">Waiting for data...</div>
+
+    <script>
+        let ws = new WebSocket("ws://127.0.0.1:8080/ws");
+
+        ws.onopen = () => {
+            console.log("Connected to WebSocket");
+        };
+
+        ws.onclose = () => {
+            console.log("Disconnected from WebSocket");
+        };
+
+        ws.onmessage = (msg) => {
+            console.log("Received:", msg.data);
+
+            let dataDiv = document.getElementById('sensor-data');
+            try {
+                let cleanData = msg.data;
+                if (cleanData.startsWith('"') && cleanData.endsWith('"')) {
+                    cleanData = cleanData.slice(1, -1);
+                }
+
+                let jsonData = JSON.parse(cleanData);
+
+                let list = document.createElement('div');
+
+                for (let key in jsonData) {
+                    let item = document.createElement('div');
+                    item.classList.add('sensor-item');
+
+                    let keySpan = document.createElement('span');
+                    keySpan.classList.add('sensor-key');
+                    keySpan.textContent = key + ': ';
+
+                    let valueSpan = document.createElement('span');
+                    valueSpan.textContent = jsonData[key];
+
+                    item.appendChild(keySpan);
+                    item.appendChild(valueSpan);
+
+                    list.appendChild(item);
+                }
+
+                dataDiv.innerHTML = '';  // Clear previous content
+                dataDiv.appendChild(list);
+
+            } catch (e) {
+                console.error("Error parsing JSON:", e);
+                dataDiv.textContent = "Invalid JSON data received";
+            }
+        };
+    
+        update_ui = (data) => {
+            let dataDiv = document.getElementById('sensor-data');
+            dataDiv.textContent = JSON.stringify(data, null, 2);
+        };
+        
+    
+    </script>
+
+</body>
+</html>
