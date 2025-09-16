@@ -9,4 +9,6 @@ extern const int MQTT_PORT;
 extern const char* MQTT_USER;
 extern const char* MQTT_PASS;
 extern const char* MQTT_TOPIC;
+extern const char* MODULE_ID;
+
 #endif

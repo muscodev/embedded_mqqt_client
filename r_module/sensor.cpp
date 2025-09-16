@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "sensor.h"
+#include "config.h"
 #include <ArduinoJson.h>
 // D Label	GPIO Number
 // D0	GPIO16
@@ -23,6 +24,7 @@ void InitSensors(){
 String SensorsToJson(){
 
   JsonDocument doc;
+  doc["ID"] = MODULE_ID;
   for(int i = 0; i< DIGITAL_SENSOR_COUNT; i++ )
   {
       doc[String(sensors[i])] = String(digitalRead(sensors[i]));
@@ -30,5 +32,6 @@ String SensorsToJson(){
   String output;
   serializeJson(doc,output);
   serializeJson(doc,Serial);
+  Serial.println();
   return output;
 }
